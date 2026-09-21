@@ -1,6 +1,17 @@
 const express = require('express');
 const app = express();
 const cors= require('cors')
+const { MongoClient } =require('mongodb')
+require('dotenv').config()
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ofz2urn.mongodb.net/?appName=Cluster0`
+const client = new MongoClient(uri);
+
+async function connectDB(){
+
+    await client.connect()
+    console.log("تم الاتصال بنجاح")
+}
+connectDB();
 app.use(cors())
 app.use(express.json()); 
 
