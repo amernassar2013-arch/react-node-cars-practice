@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors= require('cors')
-const { MongoClient } =require('mongodb')
+const { MongoClient,ObjectId } =require('mongodb')
 require('dotenv').config()
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ofz2urn.mongodb.net/?appName=Cluster0`
 const client = new MongoClient(uri);
@@ -20,10 +20,10 @@ app.get('/',function(req,res){
     res.send('أهلا من السيرفر')
 });
 
-app.get('/about',function(req,res){
-    res.send('هاي الصفحه انا الي عملتها')
+// app.get('/about',function(req,res){
+//     res.send('هاي الصفحه انا الي عملتها')
 
-})
+// })
 // let cars =[
 //   {brand: "toyota", price: 15000},
 //   {brand: "honda", price: 18000},
@@ -53,6 +53,21 @@ app.post('/cars',async function(req,res){
 
 
 })
+
+app.delete('/cars/:id',async function(req,res){
+    let deleteItem = await carsCollection.deleteOne({_id: new ObjectId(req.params.id)})
+    res.send(deleteItem)
+})
+
+
+app.put('/cars/:id',async function(req,res){
+let updateData= await carsCollection.updateOne(
+{_id:new ObjectId(req.params.id)},
+{$set:req.body})
+res.send(updateData)
+})
+
+
 
 app.listen(3000, function(){
     console.log('السيرفر شغال على بورت 3000')
