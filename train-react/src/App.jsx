@@ -9,12 +9,14 @@ const [cars, setCars] = useState([]);
 const [newBrand,setNewBrand] = useState("")
 const [newPrice,setNewPrice] = useState(0)
 
-useEffect(function(){
   async function fetchCars() {
     let response = await fetch("http://localhost:3000/cars");
     let data = await response.json();
     setCars(data);
   }
+
+useEffect(function(){
+
   fetchCars()
 
 },[])
@@ -26,8 +28,9 @@ async function addCar(){
     body: JSON.stringify({brand:newBrand,price:newPrice})
 
   }) 
-  let data=await response.json();
-  setCars(data);
+
+  fetchCars()
+  
 }
 
 
