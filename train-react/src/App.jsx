@@ -9,6 +9,8 @@ const [cars, setCars] = useState([]);
 const [newBrand,setNewBrand] = useState("")
 const [newPrice,setNewPrice] = useState(0)
 
+
+
   async function fetchCars() {
     let response = await fetch("http://localhost:3000/cars");
     let data = await response.json();
@@ -34,16 +36,30 @@ async function addCar(){
 }
 
 
+async function updateCar(carId,newPrice,newBrand){
+  let response= await fetch(`http://localhost:3000/cars/${carId}`,{
+  method: "put",
+  headers:{"Content-Type":"application/json"},
+  body: JSON.stringify({brand:newBrand,price:newPrice})
+  })
+  fetchCars()
+}  
+
+
+
 let filterCars=cars.filter(function(car){return car.price>=minPrice})
   return <div> <input type="number" onChange={function(e) {setMinPrice(e.target.value)}}>
     </input><ul>{filterCars=cars.filter(function(car){return car.price>=minPrice})
-.map(function(car){return <CarCard car={car}/>})}</ul>
+.map(function(car){return <CarCard car={car} updateCar={updateCar}/>})}</ul>
     <span>
     <input placeholder="النوع" type="text" onChange={function(e) {setNewBrand(e.target.value)}} /><br/>
     <input placeholder="السعر"  type="number" onChange={function(e) {setNewPrice(e.target.value)}} /><br/>
     <button onClick={addCar}>اضافه</button> <br/>
     </span>
+  
 </div>
 }
+
+
 
 export default App;
